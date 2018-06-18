@@ -10,16 +10,19 @@ import java.util.List;
 
 public class DataAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
     private List<Article> mList;
-    private Context mContext;
 
     public DataAdapter(List<Article> list)
+    {
+        mList = list;
+    }
+    public void addAll(List<Article> list)
     {
         mList = list;
     }
 
     @Override
     public ArticleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(mContext).inflate(R.layout.list_item,
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item,
                 parent, false);
         return new ArticleViewHolder(itemView);
     }
@@ -33,6 +36,8 @@ public class DataAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
 
     @Override
     public int getItemCount() {
+        if(mList == null)
+            return 0;
         return mList.size();
     }
 }
