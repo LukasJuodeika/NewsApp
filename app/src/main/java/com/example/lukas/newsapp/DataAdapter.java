@@ -8,11 +8,13 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-public class DataAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
+public class DataAdapter extends RecyclerView.Adapter<ArticleViewHolder>  {
     private List<Article> mList;
+    private Context mContext;
 
-    public DataAdapter(List<Article> list)
+    public DataAdapter(Context context, List<Article> list)
     {
+        mContext = context;
         mList = list;
     }
     public void addAll(List<Article> list)
@@ -24,7 +26,7 @@ public class DataAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
     public ArticleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item,
                 parent, false);
-        return new ArticleViewHolder(itemView);
+        return new ArticleViewHolder(mContext, itemView);
     }
 
     @Override
@@ -40,4 +42,5 @@ public class DataAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
             return 0;
         return mList.size();
     }
+
 }

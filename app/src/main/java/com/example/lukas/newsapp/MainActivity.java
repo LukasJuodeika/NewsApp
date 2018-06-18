@@ -7,12 +7,13 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private RecyclerView mRecyclerView;
     private DataAdapter mDataAdapter;
@@ -29,14 +30,15 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.list);
 
         mList = Network.getArticles(mURL);
-        mDataAdapter = new DataAdapter(mList);
+        mDataAdapter = new DataAdapter(this,mList);
         new Network().execute(new AsyncDataObject(mURL,mDataAdapter));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setAdapter(mDataAdapter);
 
-        
+
+
 
 
 
