@@ -49,10 +49,12 @@ public class Network extends AsyncTask<AsyncDataObject, Void, DataAdapter>{
             connection.connect();
             InputStream input = connection.getInputStream();
             Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            Bitmap thumbnail = ThumbnailUtils.extractThumbnail(myBitmap,100,100);
+            // ;
+
+
 
             Log.e("Bitmap","returned");
-            return thumbnail;
+            return myBitmap;
         } catch (IOException e) {
             e.printStackTrace();
             Log.e("Exception",e.getMessage());
@@ -66,7 +68,8 @@ public class Network extends AsyncTask<AsyncDataObject, Void, DataAdapter>{
 
         JSONObject object = new JSONObject(jsonString);
         JSONArray array = object.getJSONArray("articles");
-        String date, text, image;
+        String date, text, image, description,url;
+        Bitmap bitImage;
 
         for(int i = 0; i<array.length();i++)//bitmap, String, String
         {
@@ -74,8 +77,12 @@ public class Network extends AsyncTask<AsyncDataObject, Void, DataAdapter>{
             date = o.getString("publishedAt");
             text = o.getString("title");
             image = o.getString("urlToImage");
+            description = o.getString("description");
+            url = o.getString("url");
+            bitImage = getBitmapFromURL(image);
 
-            Article article = new Article(getBitmapFromURL(image),text,date);
+            Article article = new Article(ThumbnailUtils.extractThumbnail(bitImage,100,100),
+                    text,date,description,url,bitImage);
             articles.add(article);
         }
         return articles;
