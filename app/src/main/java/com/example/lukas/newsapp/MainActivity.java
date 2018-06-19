@@ -25,23 +25,15 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
         mRecyclerView = findViewById(R.id.list);
 
         mList = Network.getArticles(mURL);
-        mDataAdapter = new DataAdapter(this,mList);
+        mDataAdapter = new DataAdapter(this,mList, new PicassoImageLoader());
         new Network().execute(new AsyncDataObject(mURL,mDataAdapter));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setAdapter(mDataAdapter);
-
-
-
-
-
-
     }
 
 }

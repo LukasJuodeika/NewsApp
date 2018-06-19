@@ -31,7 +31,6 @@ public class Network extends AsyncTask<AsyncDataObject, Void, DataAdapter>{
         Request request = new Request.Builder()
                 .url(URL)
                 .build();
-
         Response response = client.newCall(request).execute();
 
         if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
@@ -79,10 +78,9 @@ public class Network extends AsyncTask<AsyncDataObject, Void, DataAdapter>{
             image = o.getString("urlToImage");
             description = o.getString("description");
             url = o.getString("url");
-            bitImage = getBitmapFromURL(image);
+            //bitImage = getBitmapFromURL(image);
 
-            Article article = new Article(ThumbnailUtils.extractThumbnail(bitImage,100,100),
-                    text,date,description,url,bitImage);
+            Article article = new Article(image, text,date,description,url);
             articles.add(article);
         }
         return articles;

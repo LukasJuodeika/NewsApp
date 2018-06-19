@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
@@ -31,9 +33,10 @@ public class DetailedActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
 
-      //  Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+
         String description = extras.getString("description");
         final String url = extras.getString("url");
+        String imageUrl =  extras.getString("imageUrl");
 
 
         textView = (TextView) findViewById(R.id.description);
@@ -41,12 +44,7 @@ public class DetailedActivity extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.image);
 
         textView.setText(description);
-        ///data/user/0/com.example.lukas.newsapp/files/current_image.PNG
-        ///storage/emulated/0/com.example.lukas.newsapp/files
-       // imageView.setImageBitmap(bitmap);
-        //imageView.setImageURI(getFileUri());
-       // imageView.setImageURI();
-        imageView.setImageBitmap(getThumbnail("current_image.png"));
+        new PicassoImageLoader().load(imageUrl, imageView);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,82 +55,6 @@ public class DetailedActivity extends AppCompatActivity {
         });
 
 
-
-
     }
-    public boolean isSdReadable() {
-
-        boolean mExternalStorageAvailable = false;
-        String state = Environment.getExternalStorageState();
-
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            // We can read and write the media
-            mExternalStorageAvailable = true;
-            Log.i("isSdReadable", "External storage card is readable.");
-        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            // We can only read the media
-            Log.i("isSdReadable", "External storage card is readable.");
-            mExternalStorageAvailable = true;
-        } else {
-            // Something else is wrong. It may be one of many other
-            // states, but all we need to know is we can neither read nor write
-            mExternalStorageAvailable = false;
-        }
-
-        return mExternalStorageAvailable;
-    }
-
-
-    public Bitmap getThumbnail(String filename) {
-
-        String fullPath = Environment.getExternalStorageDirectory().getAbsolutePath();// + APP_PATH_SD_CARD + APP_THUMBNAIL_PATH_SD_CARD;
-        Bitmap thumbnail = null;
-
-// Look for the file on the external storage
-        try {
-            if (isSdReadable() == true) {
-                thumbnail = BitmapFactory.decodeFile(fullPath + "/" + filename);
-            }
-        } catch (Exception e) {
-            Log.e("getThumbnail() extst", e.getMessage());
-        }
-
-// If no file on external storage, look in internal storage
-        if (thumbnail == null) {
-            try {
-                File filePath = this.getFileStreamPath(filename);
-                FileInputStream fi = new FileInputStream(filePath);
-                thumbnail = BitmapFactory.decodeStream(fi);
-            } catch (Exception ex) {
-                Log.e("getThumbnail() instor", ex.getMessage());
-            }
-        }
-        return thumbnail;
-    }
-
-
-
-   /* private Uri getFileUri(){
-
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
-              //  + "/Android/data/"
-                + getApplicationContext().getPackageName()
-                + "/files");
-
-
-        if (! mediaStorageDir.exists()){
-
-            if (! mediaStorageDir.mkdirs()){
-                return null;
-            }
-        }
-        File mediaFile;
-        String mImageName="current_image.png";
-        mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
-
-        return Uri.fromFile(mediaFile);
-    }
-*/
-
 
 }
