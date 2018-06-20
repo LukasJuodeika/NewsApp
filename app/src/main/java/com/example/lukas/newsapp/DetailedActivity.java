@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,15 +34,11 @@ public class DetailedActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
 
-
         String description = extras.getString("description");
         final String url = extras.getString("url");
         String imageUrl =  extras.getString("imageUrl");
 
-
-        textView = (TextView) findViewById(R.id.description);
-        button = (Button) findViewById(R.id.read_article_button);
-        imageView = (ImageView) findViewById(R.id.image);
+        setUpViews();
 
         textView.setText(description);
         new PicassoImageLoader().load(imageUrl, imageView);
@@ -55,6 +52,14 @@ public class DetailedActivity extends AppCompatActivity {
         });
 
 
+
     }
+
+    private void setUpViews() {
+        textView = (TextView) findViewById(R.id.description);
+        button = (Button) findViewById(R.id.read_article_button);
+        imageView = (ImageView) findViewById(R.id.image);
+    }
+
 
 }

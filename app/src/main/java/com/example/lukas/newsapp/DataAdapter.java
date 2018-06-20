@@ -12,12 +12,17 @@ public class DataAdapter extends RecyclerView.Adapter<ArticleViewHolder>  {
     private List<Article> mList;
     private Context mContext;
     private ImageLoader imageLoader;
+    private OnArticleClickedListener articleClickListener;
 
-    public DataAdapter(Context context, List<Article> list, ImageLoader imageLoader)
+    public DataAdapter(Context context,
+                       List<Article> list,
+                       ImageLoader imageLoader,
+                       OnArticleClickedListener listener)
     {
         mContext = context;
         mList = list;
         this.imageLoader = imageLoader;
+        articleClickListener = listener;
     }
     public void addAll(List<Article> list)
     {
@@ -28,7 +33,7 @@ public class DataAdapter extends RecyclerView.Adapter<ArticleViewHolder>  {
     public ArticleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item,
                 parent, false);
-        return new ArticleViewHolder(mContext, itemView, imageLoader);
+        return new ArticleViewHolder(mContext, itemView, imageLoader, articleClickListener);
     }
 
     @Override

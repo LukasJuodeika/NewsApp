@@ -1,9 +1,7 @@
 package com.example.lukas.newsapp;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -11,21 +9,27 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class Network extends AsyncTask<AsyncDataObject, Void, DataAdapter>{
+public class Network extends AsyncTask<Void, Void, Void>{
 
 
-    public static String getJSONString(String URL) throws Exception {
+    private String mUrl;
+    private DataAdapter mAdapter;
+    private OnRefreshFinishedListener mOnRefreshFinishedListener;
+    public Network(String url, DataAdapter adapter, OnRefreshFinishedListener listener)
+    {
+        mUrl = url;
+        mAdapter = adapter;
+        mOnRefreshFinishedListener = listener;
+    }
+
+    private static String getJSONString(String URL) throws Exception {
 
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -35,40 +39,16 @@ public class Network extends AsyncTask<AsyncDataObject, Void, DataAdapter>{
 
         if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-        String responseText = response.body().string();
-
-        return responseText;
-    }
-    public static Bitmap getBitmapFromURL(String src) {
-        try {
-            Log.e("src",src);
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            // ;
-
-
-
-            Log.e("Bitmap","returned");
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("Exception",e.getMessage());
-            return null;
-        }
+        return response.body().string();
     }
 
-    public static List<Article> getArticleFromJSON(String jsonString) throws JSONException
+    private static List<Article> getArticleFromJSON(String jsonString) throws JSONException
     {
         List<Article> articles = new ArrayList<>();
 
         JSONObject object = new JSONObject(jsonString);
         JSONArray array = object.getJSONArray("articles");
         String date, text, image, description,url;
-        Bitmap bitImage;
 
         for(int i = 0; i<array.length();i++)//bitmap, String, String
         {
@@ -78,46 +58,39 @@ public class Network extends AsyncTask<AsyncDataObject, Void, DataAdapter>{
             image = o.getString("urlToImage");
             description = o.getString("description");
             url = o.getString("url");
-            //bitImage = getBitmapFromURL(image);
 
-            Article article = new Article(image, text,date,description,url);
-            articles.add(article);
+            if(description != null && description != "null") {
+                Article article = new Article(image, text, date, description, url);
+                articles.add(article);
+            }
         }
         return articles;
     }
 
-    public static List<Article> getArticles(String URL) {
-
-        String data = null;
+    private static List<Article> getArticles(String URL) {
+        String data;
         List<Article> articles = null;
         try {
             data = getJSONString(URL);
             articles = getArticleFromJSON(data);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         return articles;
     }
 
 
-
     @Override
-    protected DataAdapter doInBackground(AsyncDataObject... asyncDataObjects) {
-        List<Article> articles = getArticles(asyncDataObjects[0].getUrl());
-
-
-        asyncDataObjects[0].adapter.addAll(articles);
-        Log.d("dataLoad", articles.get(0).getmDate());
-        Log.d("testtt",asyncDataObjects[0].adapter.getItemCount()+"");
-        return asyncDataObjects[0].adapter;
-
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+        mAdapter.notifyDataSetChanged();
+        mOnRefreshFinishedListener.onRefreshFinish();
     }
 
-    @Override
-    protected void onPostExecute(DataAdapter dataAdapter) {
-        super.onPostExecute(dataAdapter);
-        dataAdapter.notifyDataSetChanged();
-        Log.d("Network.java class","finished loading data.............................................................." +
-                ".........................................");
 
+    @Override
+    protected Void doInBackground(Void... voids) {
+        List<Article> articles = getArticles(mUrl);
+        mAdapter.addAll(articles);
+        return null;
     }
 }
