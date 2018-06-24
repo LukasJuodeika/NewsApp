@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements OnArticleClickedL
                 Intent intent = new Intent(this, FavoritesActivity.class);
                 this.startActivity(intent);
 
-
                 break;
 
                     default:
@@ -92,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements OnArticleClickedL
     public void onArticleLongClicked(Article article) {
         Toast.makeText(this,"LongClick",Toast.LENGTH_LONG).show();
         FavoritesDataSource dataSource = new FavoritesDataSource(this);
+        dataSource.getDatabase();
         dataSource.create(article);
 
     }

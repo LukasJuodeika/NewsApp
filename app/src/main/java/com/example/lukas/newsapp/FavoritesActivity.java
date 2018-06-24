@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import java.util.List;
 
@@ -23,8 +24,14 @@ public class FavoritesActivity extends AppCompatActivity implements OnArticleCli
         mRecyclerView = (RecyclerView) findViewById(R.id.list);
         mDataAdapter = new DataAdapter(this,mList,new PicassoImageLoader(),this);
        // bindList
-        Bundle bundle = new Bundle();
-        Thread thread = new Thread();
+     //   Bundle bundle = new Bundle();
+      //  Thread thread = new Thread();
+        //
+        FavoritesDataSource dataSource = new FavoritesDataSource(this);
+        mList = dataSource.getDatabase();
+        mDataAdapter.addAll(mList);
+        mDataAdapter.notifyDataSetChanged();
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
