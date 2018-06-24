@@ -34,7 +34,7 @@ public class DetailedActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
 
-        String description = extras.getString("description");
+        String description = extras != null ? extras.getString("description") : "";
         final String url = extras.getString("url");
         String imageUrl =  extras.getString("imageUrl");
 

@@ -14,10 +14,10 @@ public class DataAdapter extends RecyclerView.Adapter<ArticleViewHolder>  {
     private ImageLoader imageLoader;
     private OnArticleClickedListener articleClickListener;
 
-    public DataAdapter(Context context,
-                       List<Article> list,
-                       ImageLoader imageLoader,
-                       OnArticleClickedListener listener)
+    DataAdapter(Context context,
+                List<Article> list,
+                ImageLoader imageLoader,
+                OnArticleClickedListener listener)
     {
         mContext = context;
         mList = list;

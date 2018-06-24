@@ -16,7 +16,7 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder{
     private ImageLoader imageLoader;
     private OnArticleClickedListener articleClickListener;
 
-    public ArticleViewHolder(Context context,
+    ArticleViewHolder(Context context,
                              View itemView,
                              ImageLoader imageLoader,
                              OnArticleClickedListener listener) {
@@ -30,6 +30,15 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder{
             @Override
             public void onClick(View v) {
                 articleClickListener.onArticleClicked(mArticle);
+            }
+
+        });
+        itemView.setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+                articleClickListener.onArticleLongClicked(mArticle);
+                return true;
             }
         });
     }

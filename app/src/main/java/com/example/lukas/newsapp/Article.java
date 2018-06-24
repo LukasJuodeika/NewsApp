@@ -1,15 +1,13 @@
 package com.example.lukas.newsapp;
 
-import java.io.Serializable;
-
-public class Article implements Serializable {
+public class Article {
     private String mText;
     private String mDate;
     private String mDescription;
     private String mURL;
     private String mImageUrl;
 
-    public Article(String imageUrl, String text, String date, String description, String URL)
+    Article(String imageUrl, String text, String date, String description, String URL)
     {
         mImageUrl = imageUrl;
         mText = text;
@@ -40,4 +38,6 @@ public class Article implements Serializable {
     public String getmDate() {
         return mDate;
     }
+
+
 }

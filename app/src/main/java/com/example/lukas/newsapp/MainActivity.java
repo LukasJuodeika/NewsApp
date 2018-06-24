@@ -1,12 +1,19 @@
 package com.example.lukas.newsapp;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -26,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements OnArticleClickedL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         bindViews();
         mDataAdapter = new DataAdapter(this,mList, new PicassoImageLoader(),this);
         new Network(mURL,mDataAdapter,this).execute();
@@ -41,6 +49,34 @@ public class MainActivity extends AppCompatActivity implements OnArticleClickedL
 
             }
         });
+
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.favorite:
+                Intent intent = new Intent(this, FavoritesActivity.class);
+                this.startActivity(intent);
+
+
+                break;
+
+                    default:
+                    return super.onOptionsItemSelected(item);
+        }
+
+        return true;
     }
 
     @Override
@@ -52,8 +88,16 @@ public class MainActivity extends AppCompatActivity implements OnArticleClickedL
         this.startActivity(intent);
     }
 
+    @Override
+    public void onArticleLongClicked(Article article) {
+        Toast.makeText(this,"LongClick",Toast.LENGTH_LONG).show();
+        FavoritesDataSource dataSource = new FavoritesDataSource(this);
+        dataSource.create(article);
 
-    public void bindViews()
+    }
+
+
+    private void bindViews()
     {
         mRecyclerView = findViewById(R.id.list);
         mSwipeRefreshLayout = findViewById(R.id.swiperefresh);
@@ -62,5 +106,13 @@ public class MainActivity extends AppCompatActivity implements OnArticleClickedL
     @Override
     public void onRefreshFinish() {
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    class bandau extends Handler
+    {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
     }
 }
