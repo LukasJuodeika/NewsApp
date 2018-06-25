@@ -55,6 +55,8 @@ public class DetailedActivity extends AppCompatActivity {
 
     }
 
+
+
     private void setUpViews() {
         textView = (TextView) findViewById(R.id.description);
         button = (Button) findViewById(R.id.read_article_button);

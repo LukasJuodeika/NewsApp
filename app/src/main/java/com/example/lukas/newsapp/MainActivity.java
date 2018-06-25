@@ -52,6 +52,11 @@ public class MainActivity extends AppCompatActivity implements OnArticleClickedL
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setTitle("News App");
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -68,13 +73,10 @@ public class MainActivity extends AppCompatActivity implements OnArticleClickedL
             case R.id.favorite:
                 Intent intent = new Intent(this, FavoritesActivity.class);
                 this.startActivity(intent);
-
                 break;
-
                     default:
                     return super.onOptionsItemSelected(item);
         }
-
         return true;
     }
 
@@ -89,9 +91,8 @@ public class MainActivity extends AppCompatActivity implements OnArticleClickedL
 
     @Override
     public void onArticleLongClicked(Article article) {
-        Toast.makeText(this,"LongClick",Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"Added to favorites",Toast.LENGTH_LONG).show();
         FavoritesDataSource dataSource = new FavoritesDataSource(this);
-        dataSource.getDatabase();
         dataSource.create(article);
 
     }
@@ -108,11 +109,4 @@ public class MainActivity extends AppCompatActivity implements OnArticleClickedL
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
-    class bandau extends Handler
-    {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-        }
-    }
 }

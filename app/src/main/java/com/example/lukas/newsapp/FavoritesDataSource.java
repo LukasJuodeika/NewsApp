@@ -4,11 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+
 
 import java.util.ArrayList;
 
-public class FavoritesDataSource {
+public class FavoritesDataSource{
     private Context mContext;
 
     private FavoritesSQLiteHelper mFavoritesSQLiteHelper;
@@ -33,6 +33,7 @@ public class FavoritesDataSource {
         SQLiteDatabase db = open();
         db.beginTransaction();
 
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(FavoritesSQLiteHelper.TEXT, article.getmText());
         contentValues.put(FavoritesSQLiteHelper.DATE, article.getmDate());
@@ -47,12 +48,12 @@ public class FavoritesDataSource {
         close(db);
     }
     public ArrayList<Article> getDatabase() {
-       // SQLiteDatabase db =
 
 
         String selectQuery = "SELECT  * FROM " + FavoritesSQLiteHelper.TABLE_NAME;
         SQLiteDatabase db  =  mFavoritesSQLiteHelper.getReadableDatabase();
-        Cursor cursor      = db.rawQuery(selectQuery, null);
+        Cursor cursor      = db.query(FavoritesSQLiteHelper.TABLE_NAME, null,
+                null, null, null, null, null);
         ArrayList<Article>  data =  new ArrayList<>();
 
         if (cursor.moveToFirst()) {
@@ -71,4 +72,11 @@ public class FavoritesDataSource {
         cursor.close();
         return data;
     }
+
+    public void deleteAllData()
+    {
+        SQLiteDatabase db = open();
+        db.delete(FavoritesSQLiteHelper.TABLE_NAME,null,null);
+    }
+
 }
